@@ -1,3 +1,8 @@
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb/stb_image.h"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include "stb/stb_image_write.h"
+
 #include "QuickSort.hpp"
 #include <iostream>
 #include <chrono>
@@ -30,13 +35,48 @@ void print_array(int* array, int length) {
 
 int main() {
 
-    int array[] = {93, 12, 45, 86, 72, 31, 54, 21, 37, 77, 64, 58, 9, 26, 68, 17, 99, 43, 78, 81, 59, 61, 88, 36, 56, 57, 49, 92, 82, 29, 3, 51, 27, 60, 4, 66, 22, 74, 19, 47, 90, 75, 71, 63, 7, 70, 23, 28, 38, 80, 50, 73, 41, 53, 5, 10, 11, 79, 24, 30, 46, 25, 20, 35, 83, 55, 34, 85, 65, 14, 18, 67, 39, 76, 40, 15, 16, 84, 1, 48, 2, 8, 32, 33, 13, 69, 52, 18, 94, 95, 98, 30, 98, 41, 95, 29, 87, 66, 100, 93};
-    int length = 100;
-    
-    print_array(array, length);
-    {
-        Timer timer;
-        quicksort(array, length);
+    int width, height, channels;
+    char* img = (char*) stbi_load("res/nature.png", &width, &height, &channels, 0);
+
+    int i = 0, j = 0;
+
+    if(!img) {
+        std::cout << "Error in loading the image\n";
+        exit(1);
     }
-    print_array(array, length);
+
+    // std::cout << "height: " << height << " width: " << width << std::endl;
+
+    int** unsorted_array = new int*[height];
+    for(int i = 0; i < height; i++)
+        unsorted_array[i] = new int[width];
+
+    //Loop through array
+    for(char* p = img; p != img + width * height * channels; p += channels * width) {
+        for(char* q = p; q != p + channels * width; q += channels) {
+            unsorted_array[i][j] = (int) *(q + 2);
+            j++; 
+        }
+        j = 0;
+        i++;
+    }
+
+    {
+    Timer timer;
+        for(int c = 0; c < height; c++) {
+            quicksort(&(unsorted_array[c][0]), width);
+        }
+    }
+
+    char* sorted_array = new char[width * height];
+
+    for(int c = 0; c < height; c++) {
+        for(int z = 0; z < width; z++) {
+            sorted_array[c * width + z] = (char) unsorted_array[c][z];
+        }
+    }
+
+    stbi_write_png("output_blue.png", width, height, 1, sorted_array, width);
+    
+        // quicksort(array, length);
 }
