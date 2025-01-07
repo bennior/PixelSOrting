@@ -1,9 +1,5 @@
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb/stb_image.h"
-#define STB_IMAGE_WRITE_IMPLEMENTATION
-#include "stb/stb_image_write.h"
-
 #include "QuickSort.hpp"
+#include "Image.hpp"
 #include <iostream>
 #include <chrono>
 
@@ -34,49 +30,11 @@ void print_array(int* array, int length) {
 }
 
 int main() {
+    // int width = 0, height = 0, channels = 0;
 
-    int width, height, channels;
-    char* img = (char*) stbi_load("res/nature.png", &width, &height, &channels, 0);
+    // char* img = (char*) stbi_load("res/nature.png", &width, &height, &channels, 3);
+    // stbi_write_png("output.png", width, height, 3, img, width * 3);
 
-    int i = 0, j = 0;
-
-    if(!img) {
-        std::cout << "Error in loading the image\n";
-        exit(1);
-    }
-
-    // std::cout << "height: " << height << " width: " << width << std::endl;
-
-    int** unsorted_array = new int*[height];
-    for(int i = 0; i < height; i++)
-        unsorted_array[i] = new int[width];
-
-    //Loop through array
-    for(char* p = img; p != img + width * height * channels; p += channels * width) {
-        for(char* q = p; q != p + channels * width; q += channels) {
-            unsorted_array[i][j] = (int) *(q + 2);
-            j++; 
-        }
-        j = 0;
-        i++;
-    }
-
-    {
-    Timer timer;
-        for(int c = 0; c < height; c++) {
-            quicksort(&(unsorted_array[c][0]), width);
-        }
-    }
-
-    char* sorted_array = new char[width * height];
-
-    for(int c = 0; c < height; c++) {
-        for(int z = 0; z < width; z++) {
-            sorted_array[c * width + z] = (char) unsorted_array[c][z];
-        }
-    }
-
-    stbi_write_png("output_blue.png", width, height, 1, sorted_array, width);
-    
-        // quicksort(array, length);
+  Pixel** pixels = o_load_image("res/nature.png");
+o_write_image(pixels, "output_image.png");
 }
