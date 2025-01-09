@@ -4,6 +4,8 @@
 #include "stb/stb_image_write.h"
 
 #include "image.hpp"
+#include "quicksort.hpp"
+#include "image_utility.hpp"
 #include <iostream>
 
 void load_image(Image& __image, char* __file_name) {
@@ -26,13 +28,28 @@ void load_image(Image& __image, char* __file_name) {
             __image.pixels[i][j].red = *(p); 
             __image.pixels[i][j].green = *(p + 1);
             __image.pixels[i][j].blue = *(p + 2);
-            __image.pixels[i][j].sorting_value = 0;
-
+            __image.pixels[i][j].sorting_value = get_hue(*p, *(p + 1), *(p + 2));
             p += desired_channels;
         }
     }
 
-    delete img;
+    delete[] img;
+}
+
+void pixel_sort(Image& __image) {
+    for(int i = 0; i < __image.height; i++) {
+        int* array = new int[__image.width];
+        
+        for(int j = 0; j < __image.width; j++)
+            array[j] = __image.pixels[i][j].sorting_value;
+        
+        quicksort(array, __image.width, __image.pixels[i]);
+
+        for(int j = 0; j < __image.width; j++)
+            __image.pixels[i][j].sorting_value = array[j];
+
+        delete[] array;
+    } 
 }
 
 void write_image(Image& __image, char* __file_name) {
@@ -51,8 +68,8 @@ void write_image(Image& __image, char* __file_name) {
         }
     }
 
-    stbi_write_png(__file_name, __image.width, __image.height, channels, img, __image.width * channels);
+    stbi_write_png(__file_name, __image.width, __image.height, 3, img, __image.width * channels);
 
-    delete img;
+    delete[] img;
 }
 

@@ -4,7 +4,7 @@ typedef struct {
     char red;
     char green;
     char blue;
-    char sorting_value;
+    int sorting_value;
 } Pixel;
 
 typedef struct {
@@ -17,3 +17,5 @@ typedef struct {
 
 void load_image(Image& img, char* file_name);
 void write_image(Image& img, char* file_name);
+
+void pixel_sort(Image& img);
