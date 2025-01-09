@@ -1,4 +1,4 @@
-#include "QuickSort.hpp"
+#include "quicksort.hpp"
 #include <utility>
 #include <cstdlib>
 #include <ctime>

@@ -1,5 +1,5 @@
-#include "QuickSort.hpp"
-#include "Image.hpp"
+#include "quicksort.hpp"
+#include "image.hpp"
 #include <iostream>
 #include <chrono>
 
@@ -30,11 +30,10 @@ void print_array(int* array, int length) {
 }
 
 int main() {
-    // int width = 0, height = 0, channels = 0;
-
-    // char* img = (char*) stbi_load("res/nature.png", &width, &height, &channels, 3);
-    // stbi_write_png("output.png", width, height, 3, img, width * 3);
-
-  Pixel** pixels = o_load_image("res/nature.png");
-o_write_image(pixels, "output_image.png");
+    Image image;
+    {
+    Timer timer;
+    load_image(image, "res/nature.png"); 
+    write_image(image, "res/output_nature.png");
+    }
 }
