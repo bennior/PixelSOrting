@@ -14,8 +14,8 @@ int main() {
     Image image;
     {
     Timer timer;
-    load_image(image, "res/sky.png"); 
+    load_image(image, "res/blocks.png"); 
     pixel_sort(image);
-    write_image(image, "res/output_nature.png");
+    write_image(image, "output_images/blocks_final.png");
     }
 }

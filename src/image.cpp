@@ -67,7 +67,7 @@ void write_image(Image& __image, char* __file_name) {
             p += channels;
         }
     }
-
+        
     stbi_write_png(__file_name, __image.width, __image.height, 3, img, __image.width * channels);
 
     delete[] img;
